@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack // Added import
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -46,6 +47,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.kwabenaberko.newsapilib.models.Article
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.time.format.DateTimeParseException
 
 @Composable
 fun HomePage(newsViewModel: NewsViewModel, navController: NavHostController)
@@ -66,8 +71,32 @@ fun HomePage(newsViewModel: NewsViewModel, navController: NavHostController)
     }
 }
 
+private fun formatPublishedAt(publishedAt: String?): String {
+    if (publishedAt == null) {
+        return "Unknown date"
+    }
+    return try {
+        val odt = OffsetDateTime.parse(publishedAt)
+        val localDate = odt.toLocalDate() // Convert to LocalDate
+        val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM) // Formatter for date only
+        localDate.format(formatter)
+    } catch (e: DateTimeParseException) {
+        // Fallback for potentially different date formats or if parsing fails
+        // You might want to try other common formats or return a simpler date part
+        try {
+            // Attempt to parse as just a date if datetime fails
+            val dateOnlyFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+            val date = OffsetDateTime.parse(publishedAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toLocalDate()
+            date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        } catch (e2: DateTimeParseException) {
+            "Invalid date format"
+        }
+    }
+}
+
 @Composable
 fun ArticleItem(article: Article, navController: NavHostController) {
+    val formattedDate = formatPublishedAt(article.publishedAt)
     Card (modifier = Modifier.padding(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         onClick = {
@@ -92,7 +121,23 @@ fun ArticleItem(article: Article, navController: NavHostController) {
                 .padding(start = 8.dp))
             {
                 Text(text = article.title ?: "No Title", maxLines = 3, fontWeight = FontWeight.Bold)
-                Text(text = article.source?.name ?: "Unknown Source", maxLines = 1, fontSize = 12.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) { // New Row for source and date
+                    Text(
+                        text = article.source?.name ?: "Unknown Source",
+                        maxLines = 1,
+                        fontSize = 12.sp,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    // Conditionally display the date part
+                    if (formattedDate.isNotBlank() && formattedDate != "Unknown date" && formattedDate != "Invalid date format") {
+                        Text(
+                            text = " - $formattedDate", // Added separator and date
+                            maxLines = 1,
+                            fontSize = 12.sp,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
                 //Text(text = article.description ?: "No Description")
             }
 
@@ -105,6 +150,7 @@ fun ArticleItem(article: Article, navController: NavHostController) {
 fun CategoriesBar(newsViewModel: NewsViewModel) {
 
     var searchQuery by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf("general") }
 
     QueryTextField(
         query = searchQuery,
@@ -116,7 +162,7 @@ fun CategoriesBar(newsViewModel: NewsViewModel) {
             // Keyboard hiding is handled within QueryTextField
         },
         onSearchCancelled = { // New lambda for search cancellation
-            // searchQuery is cleared by onQueryChanged("") inside QueryTextField
+            selectedCategory = "general"// searchQuery is cleared by onQueryChanged("") inside QueryTextField
             newsViewModel.fetchNewsTopHeadlines("general") // Fetch general news
         },
         label = "Search" // This is used as placeholder text
@@ -135,8 +181,18 @@ fun CategoriesBar(newsViewModel: NewsViewModel) {
     ) {
 
         categoriesList.forEach { category ->
-            Button(onClick = {newsViewModel.fetchNewsTopHeadlines(category)},
-                modifier = Modifier.padding(4.dp)){
+            val isSelected = category == selectedCategory
+            Button(
+                onClick = {
+                selectedCategory = category
+                newsViewModel.fetchNewsTopHeadlines(category)
+                },
+                modifier = Modifier.padding(4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            ){
                 Text(text = category)
             }
 

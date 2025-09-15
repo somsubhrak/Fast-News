@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.fastnews"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -68,4 +68,10 @@ dependencies {
     // Jetpack Compose integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    // ... other dependencies
+    implementation("androidx.compose.material3:material3")
+    // For a wider range of icons, you might explicitly add:
+    implementation("androidx.compose.material:material-icons-extended")
+
 }
