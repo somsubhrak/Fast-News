@@ -1,5 +1,7 @@
 package com.example.fastnews
 
+import com.example.fastnews.BuildConfig
+
 object Constant {
-    const val apiKey = "32ee1ae28c5e49e8be4f89acc81e54e2"
+    const val apiKey: String = BuildConfig.NEWS_API_KEY
 }

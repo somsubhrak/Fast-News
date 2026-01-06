@@ -1,12 +1,10 @@
 package com.example.fastnews
 
-// ... other imports ...
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,10 +17,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -43,32 +40,38 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val newsViewModel = ViewModelProvider(this)[NewsViewModel::class.java]
+
+        // The ViewModelFactory now manages the repository, so we pass the application context.
+        val viewModelFactory = ViewModelFactory(application)
+        val newsViewModel = ViewModelProvider(this, viewModelFactory)[NewsViewModel::class.java]
+        val settingsViewModel = ViewModelProvider(this, viewModelFactory)[SettingsViewModel::class.java]
 
         setContent {
-            val navController = rememberNavController()
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
+            val darkMode by settingsViewModel.darkModeEnabled.observeAsState(isSystemInDarkTheme())
 
-            val bottomNavItems = listOf(
-                BottomNavItem(
-                    label = "Home",
-                    icon = Icons.Filled.Home,
-                    route = HomePageScreen
-                ),
-                BottomNavItem(
-                    label = "Bookmarks",
-                    icon = Icons.Filled.Bookmarks,
-                    route = BookmarksScreen
-                ),
-                BottomNavItem(
-                    label = "Settings",
-                    icon = Icons.Filled.Settings,
-                    route = SettingsScreen
+            FastNewsTheme(darkTheme = darkMode) {
+                val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+
+                val bottomNavItems = listOf(
+                    BottomNavItem(
+                        label = "Home",
+                        icon = Icons.Filled.Home,
+                        route = HomePageScreen
+                    ),
+                    BottomNavItem(
+                        label = "Bookmarks",
+                        icon = Icons.Filled.Bookmarks,
+                        route = BookmarksScreen
+                    ),
+                    BottomNavItem(
+                        label = "Settings",
+                        icon = Icons.Filled.Settings,
+                        route = SettingsScreen
+                    )
                 )
-            )
 
-            FastNewsTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
@@ -104,29 +107,17 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable<HomePageScreen> {
-                            HomePage(newsViewModel, navController)
+                            HomePage(newsViewModel, settingsViewModel, navController)
                         }
                         composable<NewsArticleScreen> {
                             val args = it.toRoute<NewsArticleScreen>()
                             NewsArticlePage(args.url)
                         }
                         composable<BookmarksScreen> {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text("Bookmarks Screen (TODO)", fontSize = 20.sp)
-                            }
+                            BookmarksScreen(settingsViewModel, navController)
                         }
                         composable<SettingsScreen> {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text("Settings Screen (TODO)", fontSize = 20.sp)
-                            }
+                            SettingsScreen(settingsViewModel)
                         }
                     }
                 }

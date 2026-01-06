@@ -1,8 +1,17 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.2.20"
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
 }
 
 android {
@@ -17,6 +26,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val newsApiKey = localProperties.getProperty("NEWS_API_KEY") ?: ""
+        buildConfigField("String", "NEWS_API_KEY", "\"$newsApiKey\"")
+
+        val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
 
     buildTypes {
@@ -37,6 +52,10 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+    aaptOptions {
+        noCompress("tflite")
     }
 }
 
@@ -73,5 +92,13 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     // For a wider range of icons, you might explicitly add:
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Gemini API
+    implementation("com.google.ai.client.generativeai:generativeai:0.1.2")
+
+
+    // Jsoup for web scraping
+    implementation("org.jsoup:jsoup:1.17.2")
 
 }
