@@ -10,13 +10,13 @@
 
 # 
 
-# \- Top headlines by region  
+# \- Top headlines by region
 
-# \- Category-based browsing and search  
+# \- Category-based browsing and search
 
-# \- Dark mode support  
+# \- Dark mode support
 
-# \- Article summarization using Gemini AI  
+# \- Article summarization using Gemini AI
 
 # 
 
@@ -24,17 +24,15 @@
 
 # 
 
-# \- Kotlin + Jetpack Compose (Material 3)  
+# \- \*\*Language:\*\* Kotlin
 
-# \- MVVM (ViewModel, LiveData, Flow)  
+# \- \*\*UI:\*\* Jetpack Compose (Material 3)
 
-# \- NewsAPI  
+# \- \*\*Architecture:\*\* MVVM (ViewModel, LiveData, Flow)
 
-# \- Google Gemini API  
+# \- \*\*Data Source:\*\* NewsAPI
 
-# \- Jsoup (article text extraction)
+# \- \*\*AI Integration:\*\* Google Gemini API
 
-# 
-
-# 
+# \- \*\*Utilities:\*\* Jsoup (article text extraction)
 
