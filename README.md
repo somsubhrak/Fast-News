@@ -1,54 +1,40 @@
-# Fast-News
+# \# FastNews
 
-News fetching app
+# 
 
+# FastNews is an Android news application built with \*\*Jetpack Compose\*\* that delivers top headlines and category-based news using \*\*NewsAPI\*\*, with optional \*\*AI-powered summaries\*\* via Google Gemini.
 
+# 
 
+# \## Features
 
+# 
 
-FastNews is an Android news application built with Jetpack Compose that delivers top headlines and category-based news using NewsAPI, with optional AI-powered summaries via Google Gemini.
+# \- Top headlines by region  
 
+# \- Category-based browsing and search  
 
+# \- Dark mode support  
 
-Features
+# \- Article summarization using Gemini AI  
 
+# 
 
+# \## Tech Stack
 
-Top headlines by region
+# 
 
+# \- Kotlin + Jetpack Compose (Material 3)  
 
+# \- MVVM (ViewModel, LiveData, Flow)  
 
-Category-based browsing and search
+# \- NewsAPI  
 
+# \- Google Gemini API  
 
+# \- Jsoup (article text extraction)
 
-Dark mode support
+# 
 
-
-
-Article summarization using Gemini AI
-
-
-
-Tech Stack
-
-
-
-Kotlin + Jetpack Compose (Material 3)
-
-
-
-MVVM (ViewModel, LiveData, Flow)
-
-
-
-NewsAPI
-
-
-
-Google Gemini API
-
-
-
-Jsoup (article text extraction)
+# 
 
