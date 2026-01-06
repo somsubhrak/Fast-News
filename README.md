@@ -1,38 +1,36 @@
-# \# FastNews
-
 # 
 
-# FastNews is an Android news application built with \*\*Jetpack Compose\*\* that delivers top headlines and category-based news using \*\*NewsAPI\*\*, with optional \*\*AI-powered summaries\*\* via Google Gemini.
+# > # FastNews  
 
-# 
+# >  
 
-# \## Features
+# > FastNews is an Android news application built with \*\*Jetpack Compose\*\* that delivers top headlines and category-based news using \*\*NewsAPI\*\*, with optional \*\*AI-powered summaries\*\* via \*\*Google Gemini\*\*.  
 
-# 
+# >  
 
-# \- Top headlines by region
+# > ## Features  
 
-# \- Category-based browsing and search
+# > - Top headlines by region  
 
-# \- Dark mode support
+# > - Category-based browsing and search  
 
-# \- Article summarization using Gemini AI
+# > - Dark mode support  
 
-# 
+# > - Article summarization using Gemini AI  
 
-# \## Tech Stack
+# >  
 
-# 
+# > ## Tech Stack  
 
-# \- \*\*Language:\*\* Kotlin
+# > - \*\*Language:\*\* Kotlin  
 
-# \- \*\*UI:\*\* Jetpack Compose (Material 3)
+# > - \*\*UI:\*\* Jetpack Compose (Material 3)  
 
-# \- \*\*Architecture:\*\* MVVM (ViewModel, LiveData, Flow)
+# > - \*\*Architecture:\*\* MVVM (ViewModel, LiveData, Flow)  
 
-# \- \*\*Data Source:\*\* NewsAPI
+# > - \*\*Data Source:\*\* NewsAPI  
 
-# \- \*\*AI Integration:\*\* Google Gemini API
+# > - \*\*AI Integration:\*\* Google Gemini API  
 
-# \- \*\*Utilities:\*\* Jsoup (article text extraction)
+# > - \*\*Utilities:\*\* Jsoup (article text extraction)  
 

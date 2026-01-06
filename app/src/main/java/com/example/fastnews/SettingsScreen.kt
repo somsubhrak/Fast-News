@@ -37,9 +37,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
     val preferredLanguage by viewModel.preferredLanguage.observeAsState()
     val darkModeEnabled by viewModel.darkModeEnabled.observeAsState()
 
-    val countries = Locale.getISOCountries().map { code ->
-        Pair(code, Locale("", code).displayCountry)
-    }
+    val countries = listOf( "us" to "United States", "gb" to "United Kingdom", "in" to "India", "ca" to "Canada", "au" to "Australia", "de" to "Germany", "fr" to "France" )
     val languages = listOf(
         Pair("ar", "Arabic"), Pair("de", "German"), Pair("en", "English"), Pair("es", "Spanish"),
         Pair("fr", "French"), Pair("he", "Hebrew"), Pair("it", "Italian"), Pair("nl", "Dutch"),
@@ -61,7 +59,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Dark Mode", fontSize = 20.sp)
+            Text("Dark Mode", fontSize = 18.sp)
             Switch(
                 checked = darkModeEnabled ?: isSystemInDarkTheme(),
                 onCheckedChange = { viewModel.setDarkModeEnabled(it) }
@@ -74,7 +72,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Preferred News Region", fontSize = 20.sp)
+            Text("Preferred News Region", fontSize = 18.sp)
             ExposedDropdownMenuBox(expanded = countryExpanded, onExpandedChange = { countryExpanded = it }) {
                 TextField(
                     value = preferredCountry?.let { Locale("", it).displayCountry } ?: "",
@@ -99,7 +97,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Preferred Language", fontSize = 20.sp)
+            Text("Preferred Language", fontSize = 18.sp)
             ExposedDropdownMenuBox(expanded = languageExpanded, onExpandedChange = { languageExpanded = it }) {
                 TextField(
                     value = preferredLanguage?.let { langCode -> languages.find { it.first == langCode }?.second } ?: "",
